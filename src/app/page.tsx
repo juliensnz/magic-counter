@@ -9,6 +9,7 @@ const Container = styled.div`
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  touch-action: none;
 `;
 
 export default function Home() {
