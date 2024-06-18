@@ -16,9 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-      </body>
+      <StyledComponentsRegistry>
+        <body style={{margin: 0}} className={inter.className}>
+          {children}
+        </body>
+      </StyledComponentsRegistry>
     </html>
   );
 }
