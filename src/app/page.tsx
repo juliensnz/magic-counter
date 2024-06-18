@@ -1,5 +1,6 @@
 'use client';
 
+import {useState} from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -46,18 +47,43 @@ const Score = styled.div`
   font-size: 2rem;
 `;
 
+const useScore = () => {
+  const [scores, setScores] = useState({
+    jade: 20,
+    julien: 20,
+  });
+
+  const incrementScore = (player: 'jade' | 'julien') => () => {
+    setScores(prev => ({
+      ...prev,
+      [player]: prev[player] + 1,
+    }));
+  };
+
+  const decrementScore = (player: 'jade' | 'julien') => () => {
+    setScores(prev => ({
+      ...prev,
+      [player]: prev[player] - 1,
+    }));
+  };
+
+  return [scores, incrementScore, decrementScore] as const;
+};
+
 export default function Home() {
+  const [scores, incrementScore, decrementScore] = useScore();
+
   return (
     <Container>
       <Board>
-        <ScoreModifier>+</ScoreModifier>
-        <Score>Jade</Score>
-        <ScoreModifier>-</ScoreModifier>
+        <ScoreModifier onClick={incrementScore('jade')}>+</ScoreModifier>
+        <Score>{scores.jade}</Score>
+        <ScoreModifier onClick={decrementScore('jade')}>-</ScoreModifier>
       </Board>
       <Board>
-        <ScoreModifier>+</ScoreModifier>
-        <Score>Julien</Score>
-        <ScoreModifier>-</ScoreModifier>
+        <ScoreModifier onClick={incrementScore('julien')}>+</ScoreModifier>
+        <Score>{scores.julien}</Score>
+        <ScoreModifier onClick={decrementScore('julien')}>-</ScoreModifier>
       </Board>
     </Container>
   );
