@@ -1,6 +1,6 @@
 import type {Metadata} from 'next';
 import {Inter} from 'next/font/google';
-import StyledComponentsRegistry from '@/lib/registry';
+import {GlobalStyles, StyledComponentsRegistry} from '@/lib/registry';
 
 const inter = Inter({subsets: ['latin']});
 
@@ -14,11 +14,7 @@ export const metadata: Metadata = {
     statusBarStyle: 'default',
   },
 };
-/*<meta name="viewport" content="user-scalable=no">
 
-<meta name="apple-mobile-web-app-title" content="XXXXXX">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">*/
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,7 +23,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <StyledComponentsRegistry>
-        <body style={{margin: 0}} className={inter.className}>
+        <GlobalStyles />
+        <body style={{margin: 0, backgroundColor: 'rgb(0, 128, 128)'}} className={inter.className}>
           {children}
         </body>
       </StyledComponentsRegistry>
