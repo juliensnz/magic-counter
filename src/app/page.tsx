@@ -11,10 +11,6 @@ const Container = styled.div`
   width: 100vw;
   overflow: hidden;
   touch-action: none;
-
-  :first-child {
-    transform: rotate(180deg);
-  }
 `;
 
 const Board = styled.div`
@@ -23,6 +19,10 @@ const Board = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #f0f0f0;
+
+  &:first-child {
+    transform: rotate(180deg);
+  }
 `;
 
 const ScoreModifier = styled.div`
@@ -47,6 +47,15 @@ const Score = styled.div`
   font-size: 2rem;
 `;
 
+const Reset = styled.div`
+  height: 20px;
+`;
+
+const Actions = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const useScore = () => {
   const [scores, setScores] = useState({
     jade: 20,
@@ -67,11 +76,18 @@ const useScore = () => {
     }));
   };
 
-  return [scores, incrementScore, decrementScore] as const;
+  const reset = () => {
+    setScores({
+      jade: 20,
+      julien: 20,
+    });
+  };
+
+  return [scores, incrementScore, decrementScore, reset] as const;
 };
 
 export default function Home() {
-  const [scores, incrementScore, decrementScore] = useScore();
+  const [scores, incrementScore, decrementScore, reset] = useScore();
 
   return (
     <Container>
@@ -80,6 +96,9 @@ export default function Home() {
         <Score>{scores.jade}</Score>
         <ScoreModifier onClick={decrementScore('jade')}>-</ScoreModifier>
       </Board>
+      <Actions>
+        <Reset onClick={reset}>Reset</Reset>
+      </Actions>
       <Board>
         <ScoreModifier onClick={incrementScore('julien')}>+</ScoreModifier>
         <Score>{scores.julien}</Score>
