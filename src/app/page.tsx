@@ -1,44 +1,9 @@
 'use client';
 
+import {Board} from '@/app/components/Board';
 import {useState} from 'react';
-import {WindowContent, GroupBox, Window, Button} from 'react95';
+import {WindowContent, Window, Button} from 'react95';
 import styled from 'styled-components';
-
-// const Container = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   flex-direction: column;
-//   height: 100vh;
-//   width: 100vw;
-//   overflow: hidden;
-//   touch-action: none;
-// `;
-
-// const Board = styled.div`
-//   flex: 1;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   background-color: #f0f0f0;
-
-//   &:first-child {
-//     transform: rotate(180deg);
-//   }
-// `;
-
-// const ScoreModifier = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   width: 20vw;
-//   background-color: red;
-//   height: 100%;
-//   font-size: 2rem;
-
-//   &:active {
-//     background-color: darkred;
-//   }
-// `;
 
 const FullWindow = styled(Window)`
   width: calc(100vw - 20px);
@@ -46,24 +11,19 @@ const FullWindow = styled(Window)`
   margin: 10px;
 `;
 
-const Score = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  flex: 1;
-`;
 const FullWindowContent = styled(WindowContent)`
   height: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  & > *:first-child {
+    transform: rotate(180deg);
+  }
 `;
 
-const Reset = styled(Button)`
-  // height: 20px;
-`;
+const Reset = styled(Button)``;
 
 const Actions = styled.div`
   display: flex;
@@ -71,41 +31,24 @@ const Actions = styled.div`
   padding: 20px;
 `;
 
-const FullGroupBox = styled(GroupBox)`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-`;
+const initialScores: [number, number] = [20, 20] as const;
+const letsPlay = `Let's play! 🚀`;
+const tie = 'Tie!';
+const youWon = 'You won!';
+const youLost = 'You lost!';
 
-const RotatedGroupBox = styled(FullGroupBox)`
-  transform: rotate(180deg);
-`;
+const useScores = () => {
+  const [scores, setScores] = useState<[number, number]>(initialScores);
+  const [messages, setMessages] = useState<[string, string]>([letsPlay, letsPlay]);
 
-// const Actions = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   width: 100%;
-//   gap: 20px;
-// `;
-const StyledButton = styled(Button)`
-  flex: 1;
-  height: 50px;
-`;
-
-const useScore = () => {
-  const [scores, setScores] = useState({
-    jade: 20,
-    julien: 20,
-  });
-
-  const incrementScore = (player: 'jade' | 'julien') => () => {
+  const incrementScore = (player: 0 | 1) => () => {
     setScores(prev => ({
       ...prev,
       [player]: prev[player] + 1,
     }));
   };
 
-  const decrementScore = (player: 'jade' | 'julien') => () => {
+  const decrementScore = (player: 0 | 1) => () => {
     setScores(prev => ({
       ...prev,
       [player]: prev[player] - 1,
@@ -113,38 +56,51 @@ const useScore = () => {
   };
 
   const reset = () => {
-    setScores({
-      jade: 20,
-      julien: 20,
-    });
+    setScores(initialScores);
+    if (scores[0] === scores[1]) {
+      setMessages([tie, tie]);
+    } else if (scores[0] > scores[1]) {
+      setMessages([youWon, youLost]);
+      return;
+    } else {
+      setMessages([youLost, youWon]);
+      return;
+    }
   };
 
-  return [scores, incrementScore, decrementScore, reset] as const;
+  const dispatchMessage = (player: 0 | 1, message: string) => {
+    setMessages(prev => ({
+      ...prev,
+      [player]: message,
+    }));
+  };
+
+  return [scores, incrementScore, decrementScore, reset, messages] as const;
 };
 
 export default function Home() {
-  const [scores, incrementScore, decrementScore, reset] = useScore();
+  const [scores, incrementScore, decrementScore, reset, messages] = useScores();
 
   return (
     <FullWindow>
       <FullWindowContent>
-        <RotatedGroupBox label="Jade">
-          <Score>{scores.jade}</Score>
-          <Actions>
-            <StyledButton onClick={incrementScore('jade')}>+</StyledButton>
-            <StyledButton onClick={decrementScore('jade')}>-</StyledButton>
-          </Actions>
-        </RotatedGroupBox>
+        <Board
+          label="Jade"
+          score={scores[0]}
+          increment={incrementScore(0)}
+          decrement={decrementScore(0)}
+          message={messages[0]}
+        />
         <Actions>
           <Reset onClick={reset}>Restart</Reset>
         </Actions>
-        <FullGroupBox label="Julien">
-          <Score>{scores.julien}</Score>
-          <Actions>
-            <StyledButton onClick={incrementScore('julien')}>+</StyledButton>
-            <StyledButton onClick={decrementScore('julien')}>-</StyledButton>
-          </Actions>
-        </FullGroupBox>
+        <Board
+          label="Julien"
+          score={scores[1]}
+          increment={incrementScore(1)}
+          decrement={decrementScore(1)}
+          message={messages[1]}
+        />
       </FullWindowContent>
     </FullWindow>
   );
