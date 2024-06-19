@@ -61,15 +61,15 @@ const FullWindowContent = styled(WindowContent)`
   gap: 20px;
 `;
 
-// const Reset = styled.div`
-//   height: 20px;
-// `;
+const Reset = styled(Button)`
+  // height: 20px;
+`;
 
-// const Actions = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   padding: 20px;
-// `;
+const Actions = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+`;
 
 const FullGroupBox = styled(GroupBox)`
   flex: 1;
@@ -81,12 +81,12 @@ const RotatedGroupBox = styled(FullGroupBox)`
   transform: rotate(180deg);
 `;
 
-const Actions = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  gap: 20px;
-`;
+// const Actions = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   width: 100%;
+//   gap: 20px;
+// `;
 const StyledButton = styled(Button)`
   flex: 1;
   height: 50px;
@@ -135,6 +135,9 @@ export default function Home() {
             <StyledButton onClick={decrementScore('jade')}>-</StyledButton>
           </Actions>
         </RotatedGroupBox>
+        <Actions>
+          <Reset onClick={reset}>Restart</Reset>
+        </Actions>
         <FullGroupBox label="Julien">
           <Score>{scores.julien}</Score>
           <Actions>

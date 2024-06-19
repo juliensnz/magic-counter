@@ -1,4 +1,4 @@
-import type {Metadata} from 'next';
+import type {Metadata, Viewport} from 'next';
 import {Inter} from 'next/font/google';
 import {GlobalStyles, StyledComponentsRegistry} from '@/lib/registry';
 
@@ -10,9 +10,13 @@ export const metadata: Metadata = {
   viewport: 'width=device-width, initial-scale=1, user-scalable=no',
   appleWebApp: {
     capable: true,
-    title: 'agic counter',
-    statusBarStyle: 'default',
+    title: 'Magic counter',
+    statusBarStyle: 'black-translucent',
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#00aaaa',
 };
 
 export default function RootLayout({
@@ -24,7 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <StyledComponentsRegistry>
         <GlobalStyles />
-        <body style={{margin: 0, backgroundColor: 'rgb(0, 128, 128)'}} className={inter.className}>
+        <body style={{margin: 0, backgroundColor: '#00aaaa'}} className={inter.className}>
           {children}
         </body>
       </StyledComponentsRegistry>
