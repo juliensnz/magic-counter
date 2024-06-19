@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 const FullWindow = styled(Window)`
   width: calc(100vw - 20px);
-  height: calc(100vh - 20px);
+  height: calc(100vh - 80px);
   margin: 10px;
 `;
 
